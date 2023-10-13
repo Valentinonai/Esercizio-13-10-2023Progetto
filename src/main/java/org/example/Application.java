@@ -47,7 +47,7 @@ public class Application {
         while (true) {
             try {
                 while (!bool) {
-                    logger.info("1:Aggiungi elemento 2:Rimuovi elemento 3:Ricerca ISBN 4:Riccerca per anno 5:Ricerca per autore 6:salva su disco");
+                    logger.info("1:Aggiungi elemento 2:Rimuovi elemento 3:Ricerca ISBN 4:Riccerca per anno 5:Ricerca per autore 6:salva su disco 0:Esci");
                     int risp = Integer.parseInt(input.nextLine());
                     switch (risp) {
                         case 1: {
@@ -101,6 +101,8 @@ public class Application {
                             saveItemsList(itemList, file);
                             break;
                         }
+                        case 0:
+                            return;
 
                     }
 
@@ -117,7 +119,7 @@ public class Application {
     public static List<Item> fillItem(Set<String> isbn) {
         List<Item> listItem = new ArrayList<>();
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 20; i++) {
             String cod;
             while (true) {
                 cod = String.valueOf(Math.abs(rnd.nextInt()));
