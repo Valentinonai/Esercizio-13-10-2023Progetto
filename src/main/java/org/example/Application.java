@@ -33,6 +33,14 @@ public class Application {
 
         if (!file.exists()) {
             itemList.addAll(fillItem(isbn));
+        } else {
+            try {
+                itemList.addAll(fillItemList(file));
+            } catch (IOException e) {
+                logger.error("File non caricato");
+                itemList.addAll(fillItem(isbn));
+                logger.info("Generata nuova lista");
+            }
         }
 
         Exit:
@@ -269,8 +277,8 @@ public class Application {
         return mapBook.get(author);
     }
 
-    public static void saveItemsList(List<Item> itemList, File file) {
-
+    public static void saveItemsList(List<Item> itemList, File file) throws IOException {
+        FileUtils.write(file, "", StandardCharsets.UTF_8);
         itemList.forEach(elem -> {
             String str = elem.getIsbn() + "@" + elem.getTitolo() + "@" + elem.getAnnoPubblicazione() + "@" + elem.getNumeroPagine() + "@";
             if (elem instanceof Book) {
@@ -283,5 +291,22 @@ public class Application {
                 logger.error(e.getMessage());
             }
         });
+    }
+
+    public static List<Item> fillItemList(File file) throws IOException {
+        List<Item> list = new ArrayList<>();
+        String f = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+
+        List<String> app = new ArrayList<>(List.of(f.split(System.lineSeparator())));
+
+        for (int i = 0; i < app.size(); i++) {
+            List<String> str = new ArrayList<>(List.of(app.get(i).split("@")));
+            if (str.size() == 6)
+                list.add(new Book(str.get(0), str.get(1), Integer.parseInt(str.get(2)), Integer.parseInt(str.get(3)), str.get(4), str.get(5)));
+            else {
+                list.add(new Magazine(str.get(0), str.get(1), Integer.parseInt(str.get(2)), Integer.parseInt(str.get(3)), str.get(4).equals("SETTIMANALE") ? Periodicita.SETTIMANALE : str.get(4).equals("MENSILE") ? Periodicita.MENSILE : Periodicita.SEMESTRALE));
+            }
+        }
+        return list;
     }
 }
