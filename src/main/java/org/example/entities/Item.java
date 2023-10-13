@@ -1,15 +1,13 @@
 package org.example.entities;
 
-import java.time.LocalDate;
-
 public abstract class Item {
 
     protected String isbn;
     protected String titolo;
-    protected LocalDate annoPubblicazione;
+    protected int annoPubblicazione;
     protected int numeroPagine;
 
-    public Item(String isbn, String titolo, LocalDate annoPubblicazione, int numeroPagine) {
+    public Item(String isbn, String titolo, int annoPubblicazione, int numeroPagine) {
         this.isbn = isbn;
         this.titolo = titolo;
         this.annoPubblicazione = annoPubblicazione;
@@ -40,11 +38,11 @@ public abstract class Item {
         this.titolo = titolo;
     }
 
-    public LocalDate getAnnoPubblicazione() {
+    public int getAnnoPubblicazione() {
         return annoPubblicazione;
     }
 
-    public void setAnnoPubblicazione(LocalDate annoPubblicazione) {
+    public void setAnnoPubblicazione(int annoPubblicazione) {
         this.annoPubblicazione = annoPubblicazione;
     }
 }
