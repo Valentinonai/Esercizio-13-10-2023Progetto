@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -158,10 +159,10 @@ public class Application {
             }
 
             if (rnd.nextInt(0, 2) == 0) {
-                listItem.add(new Book(cod, fkr.book().title(), rnd.nextInt(1870, 2023), rnd.nextInt(20, 1500), fkr.book().author(), fkr.book().genre()));
+                listItem.add(new Book(cod, fkr.book().title(), rnd.nextInt(1900, LocalDate.now().getYear() + 1), rnd.nextInt(20, 1500), fkr.book().author(), fkr.book().genre()));
             } else {
                 int p = rnd.nextInt(0, 3);
-                listItem.add(new Magazine(cod, fkr.book().title(), rnd.nextInt(1870, 2023), rnd.nextInt(10, 80), p == 0 ? Periodicita.SETTIMANALE : p == 1 ? Periodicita.MENSILE : Periodicita.SEMESTRALE));
+                listItem.add(new Magazine(cod, fkr.book().title(), rnd.nextInt(1900, LocalDate.now().getYear() + 1), rnd.nextInt(10, 80), p == 0 ? Periodicita.SETTIMANALE : p == 1 ? Periodicita.MENSILE : Periodicita.SEMESTRALE));
             }
         }
         return listItem;
@@ -193,9 +194,10 @@ public class Application {
                 while (!bool) {
                     logger.info("Inserisci anno di pubblicazione");
                     try {
+
                         annoPubblicazione = Integer.parseInt(input.nextLine());
-                        if (annoPubblicazione < 0)
-                            throw new Exception("Anno di pubblicazione minore di zero non valido");
+                        if (annoPubblicazione < 1900 || annoPubblicazione > LocalDate.now().getYear())
+                            throw new Exception("Anno di pubblicazione non valido(deve essere compreso tra 1900 e " + LocalDate.now().getYear() + ")");
                         bool = true;
                     } catch (NumberFormatException e) {
                         logger.error("Non hai inserito un numero");
