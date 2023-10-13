@@ -40,7 +40,8 @@ public class Application {
                     bool = true;
                 } else {
                     try {
-                        itemList.addAll(fillItemList(file));
+                        itemList.addAll(fillItemList(file, isbn));
+                        logger.info("File caricato");
                     } catch (IOException e) {
                         logger.error("File non caricato");
                         itemList.addAll(fillItem(isbn));
@@ -315,7 +316,7 @@ public class Application {
         logger.info("Salvataggio eseguito con successo");
     }
 
-    public static List<Item> fillItemList(File file) throws IOException {
+    public static List<Item> fillItemList(File file, Set<String> isbn) throws IOException {
         List<Item> list = new ArrayList<>();
         String f = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 
@@ -323,6 +324,7 @@ public class Application {
 
         for (int i = 0; i < app.size(); i++) {
             List<String> str = new ArrayList<>(List.of(app.get(i).split("@")));
+            isbn.add(str.get(0));
             if (str.size() == 6)
                 list.add(new Book(str.get(0), str.get(1), Integer.parseInt(str.get(2)), Integer.parseInt(str.get(3)), str.get(4), str.get(5)));
             else {
