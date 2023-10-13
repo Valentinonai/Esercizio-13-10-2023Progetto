@@ -3,6 +3,7 @@ package org.example;
 
 import com.github.javafaker.Faker;
 import com.sun.tools.javac.Main;
+import org.apache.commons.io.FileUtils;
 import org.example.entities.Book;
 import org.example.entities.Item;
 import org.example.entities.Magazine;
@@ -11,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,7 +39,7 @@ public class Application {
         while (true) {
             try {
                 while (!bool) {
-                    logger.info("1:Aggiungi elemento 2:Rimuovi elemento 3:Ricerca ISBN 4:Riccerca per anno 5:Ricerca per autore 6:salva su disco 7:carica da disco");
+                    logger.info("1:Aggiungi elemento 2:Rimuovi elemento 3:Ricerca ISBN 4:Riccerca per anno 5:Ricerca per autore 6:salva su disco");
                     int risp = Integer.parseInt(input.nextLine());
                     switch (risp) {
                         case 1: {
@@ -85,6 +88,10 @@ public class Application {
                             } else logger.info("Elemento trovato: " + found);
                             break;
 
+                        }
+                        case 6: {
+                            saveItemsList(itemList, file);
+                            break;
                         }
 
                     }
@@ -260,5 +267,21 @@ public class Application {
         Map<String, List<Book>> mapBook = bookList.stream().collect(Collectors.groupingBy(Book::getAutore));
 
         return mapBook.get(author);
+    }
+
+    public static void saveItemsList(List<Item> itemList, File file) {
+
+        itemList.forEach(elem -> {
+            String str = elem.getIsbn() + "@" + elem.getTitolo() + "@" + elem.getAnnoPubblicazione() + "@" + elem.getNumeroPagine() + "@";
+            if (elem instanceof Book) {
+                str += ((Book) elem).getAutore() + "@" + ((Book) elem).getGenere() + System.lineSeparator();
+            } else str += ((Magazine) elem).getPeriodicita() + System.lineSeparator();
+
+            try {
+                FileUtils.write(file, str, StandardCharsets.UTF_8, true);
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
+        });
     }
 }
