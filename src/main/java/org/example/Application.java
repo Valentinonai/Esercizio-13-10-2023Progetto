@@ -263,21 +263,27 @@ public class Application {
     public static void deleteItem(Set<String> isbn, String cod, List<Item> itemList) {
         Iterator<Item> i = itemList.iterator();
         boolean bool = false;
+        Exit:
         while (i.hasNext()) {
             Item current = i.next();
             if (current.getIsbn().equals(cod)) {
                 i.remove();
                 bool = true;
+                break Exit;
             }
 
 
         }
         if (bool == true) {
             Iterator<String> p = isbn.iterator();
+            Exit:
             while (p.hasNext()) {
                 String current = p.next();
-                if (current.equals(cod))
+                if (current.equals(cod)) {
                     p.remove();
+                    break Exit;
+                }
+
             }
             logger.info("Elemento eliminato");
         } else logger.info("Elemento non trovato");
