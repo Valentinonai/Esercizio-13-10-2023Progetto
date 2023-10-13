@@ -56,7 +56,10 @@ public class Application {
                             logger.info("Inserisci codice ISBN da cercare");
                             String cod = input.nextLine();
                             Item found = findItem(cod, itemList);
-                            System.out.println(found);
+                            if (found == null) {
+                                logger.info("Elemento non trovato");
+
+                            } else logger.info("Elemento trovato: " + found);
                             break;
 
                         }
@@ -194,18 +197,26 @@ public class Application {
 
     public static void deleteItem(Set<String> isbn, String cod, List<Item> itemList) {
         Iterator<Item> i = itemList.iterator();
+        boolean bool = false;
         while (i.hasNext()) {
             Item current = i.next();
-            if (current.getIsbn().equals(cod))
+            if (current.getIsbn().equals(cod)) {
                 i.remove();
+                bool = true;
+            }
+
 
         }
-        Iterator<String> p = isbn.iterator();
-        while (p.hasNext()) {
-            String current = p.next();
-            if (current.equals(cod))
-                p.remove();
-        }
+        if (bool == true) {
+            Iterator<String> p = isbn.iterator();
+            while (p.hasNext()) {
+                String current = p.next();
+                if (current.equals(cod))
+                    p.remove();
+            }
+        } else logger.info("Elemento non trovato");
+
+
     }
 
     public static Item findItem(String cod, List<Item> itemList) {
