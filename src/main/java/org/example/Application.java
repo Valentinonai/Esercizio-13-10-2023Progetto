@@ -31,23 +31,38 @@ public class Application {
 
         File file = new File(("src/main/java/org.example/file.txt"));
 
-        if (!file.exists()) {
-            itemList.addAll(fillItem(isbn));
-        } else {
+        while (!bool) {
+            logger.info("1:Crea nuova lista 2:Carica lista");
             try {
-                itemList.addAll(fillItemList(file));
-            } catch (IOException e) {
-                logger.error("File non caricato");
-                itemList.addAll(fillItem(isbn));
-                logger.info("Generata nuova lista");
+                int risp = Integer.parseInt(input.nextLine());
+                if (risp == 1) {
+                    itemList.addAll(fillItem(isbn));
+                    bool = true;
+                } else {
+                    try {
+                        itemList.addAll(fillItemList(file));
+                    } catch (IOException e) {
+                        logger.error("File non caricato");
+                        itemList.addAll(fillItem(isbn));
+                        logger.info("Generata nuova lista");
+                    } finally {
+                        bool = true;
+                    }
+                }
+
+            } catch (NumberFormatException e) {
+                logger.error("Inserisci un numero");
+            } catch (Exception e) {
+                logger.error(e.getMessage());
             }
         }
+        bool = false;
 
         Exit:
         while (true) {
             try {
                 while (!bool) {
-                    logger.info("1:Aggiungi elemento 2:Rimuovi elemento 3:Ricerca ISBN 4:Riccerca per anno 5:Ricerca per autore 6:salva su disco 0:Esci");
+                    logger.info("1:Aggiungi elemento 2:Rimuovi elemento 3:Ricerca ISBN 4:Riccerca per anno 5:Ricerca per autore 6:salva su disco 7:Stampa liste 0:Esci");
                     int risp = Integer.parseInt(input.nextLine());
                     switch (risp) {
                         case 1: {
@@ -55,7 +70,6 @@ public class Application {
                             if (l != null) {
                                 itemList.add(l);
                             }
-                            System.out.println(itemList);
                             break;
                         }
                         case 2: {
@@ -100,6 +114,9 @@ public class Application {
                         case 6: {
                             saveItemsList(itemList, file);
                             break;
+                        }
+                        case 7: {
+                            printList(itemList);
                         }
                         case 0:
                             return;
@@ -254,6 +271,7 @@ public class Application {
                 if (current.equals(cod))
                     p.remove();
             }
+            logger.info("Elemento eliminato");
         } else logger.info("Elemento non trovato");
 
 
@@ -293,6 +311,7 @@ public class Application {
                 logger.error(e.getMessage());
             }
         });
+        logger.info("Salvataggio eseguito con successo");
     }
 
     public static List<Item> fillItemList(File file) throws IOException {
@@ -311,4 +330,12 @@ public class Application {
         }
         return list;
     }
+
+    public static void printList(List<Item> itemList) {
+        System.out.println("*********************************BOOKS**********************************");
+        itemList.stream().filter(elem -> elem instanceof Book).forEach(elem -> System.out.println(String.valueOf(elem)));
+        System.out.println("*********************************MAGAZINES******************************");
+        itemList.stream().filter(elem -> elem instanceof Magazine).forEach(elem -> System.out.println(String.valueOf(elem)));
+    }
+
 }
