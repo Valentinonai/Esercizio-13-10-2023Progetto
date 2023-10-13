@@ -52,6 +52,14 @@ public class Application {
                             deleteItem(isbn, cod, itemList);
                             break;
                         }
+                        case 3: {
+                            logger.info("Inserisci codice ISBN da cercare");
+                            String cod = input.nextLine();
+                            Item found = findItem(cod, itemList);
+                            System.out.println(found);
+                            break;
+
+                        }
 
                     }
 
@@ -198,5 +206,9 @@ public class Application {
             if (current.equals(cod))
                 p.remove();
         }
+    }
+
+    public static Item findItem(String cod, List<Item> itemList) {
+        return itemList.stream().filter(elem -> elem.getIsbn().equals(cod)).findFirst().orElse(null);
     }
 }
