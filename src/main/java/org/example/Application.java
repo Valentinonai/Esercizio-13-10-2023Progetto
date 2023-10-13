@@ -131,8 +131,11 @@ public class Application {
                             printList(itemList);
                             break;
                         }
-                        case 0:
+                        case 0: {
+                            input.close();
                             return;
+                        }
+
 
                     }
 
