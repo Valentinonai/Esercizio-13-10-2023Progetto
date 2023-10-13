@@ -75,6 +75,17 @@ public class Application {
                             break;
 
                         }
+                        case 5: {
+                            logger.info("Inserisci autore da cercare");
+                            String author = input.nextLine();
+                            List<Book> found = findItemsByAuthor(author, itemList);
+                            if (found == null) {
+                                logger.info("Elemento non trovato");
+
+                            } else logger.info("Elemento trovato: " + found);
+                            break;
+
+                        }
 
                     }
 
@@ -238,5 +249,16 @@ public class Application {
     public static List<Item> findItemsByYear(int anno, List<Item> itemList) {
         Map<Integer, List<Item>> mapItem = itemList.stream().collect(Collectors.groupingBy(Item::getAnnoPubblicazione));
         return mapItem.get(anno);
+    }
+
+    public static List<Book> findItemsByAuthor(String author, List<Item> itemList) {
+        List<Book> bookList = itemList.stream().map(elem -> {
+            if (elem instanceof Book) return (Book) elem;
+
+            return null;
+        }).filter(elem -> elem != null).toList();
+        Map<String, List<Book>> mapBook = bookList.stream().collect(Collectors.groupingBy(Book::getAutore));
+
+        return mapBook.get(author);
     }
 }
