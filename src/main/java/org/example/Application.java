@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
@@ -56,6 +57,17 @@ public class Application {
                             logger.info("Inserisci codice ISBN da cercare");
                             String cod = input.nextLine();
                             Item found = findItem(cod, itemList);
+                            if (found == null) {
+                                logger.info("Elemento non trovato");
+
+                            } else logger.info("Elemento trovato: " + found);
+                            break;
+
+                        }
+                        case 4: {
+                            logger.info("Inserisci anno di pubblicazione da cercare");
+                            int anno = Integer.parseInt(input.nextLine());
+                            List<Item> found = findItemsByYear(anno, itemList);
                             if (found == null) {
                                 logger.info("Elemento non trovato");
 
@@ -221,5 +233,10 @@ public class Application {
 
     public static Item findItem(String cod, List<Item> itemList) {
         return itemList.stream().filter(elem -> elem.getIsbn().equals(cod)).findFirst().orElse(null);
+    }
+
+    public static List<Item> findItemsByYear(int anno, List<Item> itemList) {
+        Map<Integer, List<Item>> mapItem = itemList.stream().collect(Collectors.groupingBy(Item::getAnnoPubblicazione));
+        return mapItem.get(anno);
     }
 }
