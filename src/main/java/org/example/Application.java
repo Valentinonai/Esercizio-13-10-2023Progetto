@@ -38,7 +38,7 @@ public class Application {
                 if (risp == 1) {
                     itemList.addAll(fillItem(isbn));
                     bool = true;
-                } else {
+                } else if (risp == 2) {
                     try {
                         itemList.addAll(fillItemList(file, isbn));
                         logger.info("File caricato");
@@ -97,7 +97,10 @@ public class Application {
                             if (found == null) {
                                 logger.info("Elemento non trovato");
 
-                            } else logger.info("Elemento trovato: " + found);
+                            } else {
+                                logger.info("Elemento trovato: ");
+                                found.forEach(elem -> logger.info(String.valueOf(elem)));
+                            }
                             break;
 
                         }
@@ -108,7 +111,10 @@ public class Application {
                             if (found == null) {
                                 logger.info("Elemento non trovato");
 
-                            } else logger.info("Elemento trovato: " + found);
+                            } else {
+                                logger.info("Elemento trovato: ");
+                                found.forEach(elem -> logger.info(String.valueOf(elem)));
+                            }
                             break;
 
                         }
