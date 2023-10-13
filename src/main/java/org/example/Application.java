@@ -8,6 +8,8 @@ import org.example.entities.Book;
 import org.example.entities.Item;
 import org.example.entities.Magazine;
 import org.example.entities.Periodicita;
+import org.example.exceptions.ItemNotFound;
+import org.example.exceptions.TypeSelectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +37,10 @@ public class Application {
             logger.info("1:Crea nuova lista 2:Carica lista");
             try {
                 int risp = Integer.parseInt(input.nextLine());
+                if (risp != 1 && risp != 2) throw new TypeSelectionException("Valore non valido");
                 if (risp == 1) {
                     itemList.addAll(fillItem(isbn));
+                    logger.info("Lista generata");
                     bool = true;
                 } else if (risp == 2) {
                     try {
@@ -84,7 +88,7 @@ public class Application {
                             String cod = input.nextLine();
                             Item found = findItem(cod, itemList);
                             if (found == null) {
-                                logger.info("Elemento non trovato");
+                                throw new ItemNotFound("Elemento non trovato");
 
                             } else logger.info("Elemento trovato: " + found);
                             break;
@@ -95,7 +99,7 @@ public class Application {
                             int anno = Integer.parseInt(input.nextLine());
                             List<Item> found = findItemsByYear(anno, itemList);
                             if (found == null) {
-                                logger.info("Elemento non trovato");
+                                throw new ItemNotFound("Elemento non trovato");
 
                             } else {
                                 logger.info("Elemento trovato: ");
@@ -109,7 +113,7 @@ public class Application {
                             String author = input.nextLine();
                             List<Book> found = findItemsByAuthor(author, itemList);
                             if (found == null) {
-                                logger.info("Elemento non trovato");
+                                throw new ItemNotFound("Elemento non trovato");
 
                             } else {
                                 logger.info("Elemento trovato: ");
@@ -175,7 +179,7 @@ public class Application {
             int n = Integer.parseInt(input.nextLine());
             if (n == 0) {
                 return null;
-            } else {
+            } else if (n == 1 || n == 2) {
                 while (!bool) {
                     logger.info("Inserisci codice isbn univoco");
                     cod = input.nextLine();
@@ -253,7 +257,7 @@ public class Application {
 
                     }
                 }
-            }
+            } else throw new TypeSelectionException("Il valore inserito non è valido");
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
