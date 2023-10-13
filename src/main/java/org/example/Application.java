@@ -46,6 +46,12 @@ public class Application {
                             System.out.println(itemList);
                             break;
                         }
+                        case 2: {
+                            logger.info("Inserisci codice ISBN da eliminare");
+                            String cod = input.nextLine();
+                            deleteItem(isbn, cod, itemList);
+                            break;
+                        }
 
                     }
 
@@ -176,5 +182,21 @@ public class Application {
             logger.error(e.getMessage());
         }
         return null;
+    }
+
+    public static void deleteItem(Set<String> isbn, String cod, List<Item> itemList) {
+        Iterator<Item> i = itemList.iterator();
+        while (i.hasNext()) {
+            Item current = i.next();
+            if (current.getIsbn().equals(cod))
+                i.remove();
+
+        }
+        Iterator<String> p = isbn.iterator();
+        while (p.hasNext()) {
+            String current = p.next();
+            if (current.equals(cod))
+                p.remove();
+        }
     }
 }
