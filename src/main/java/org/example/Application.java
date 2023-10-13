@@ -117,6 +117,7 @@ public class Application {
                         }
                         case 7: {
                             printList(itemList);
+                            break;
                         }
                         case 0:
                             return;
